@@ -1,0 +1,15 @@
+.background{
+    background-image: url('./img/cloudy.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-clip: border-box;
+    background-size: cover;
+}
+.Glass{
+/* From https://css.glass */
+background: rgba(255, 255, 255, 0.19);
+border-radius: 1px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(3.4px);
+-webkit-backdrop-filter: blur(3.4px);
+}
