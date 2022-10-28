@@ -1,30 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Glass from './Glass'
 import './App.css'
 import { BsCloudsFill } from 'react-icons/bs'
 import axios from 'axios';
 
+
 export default function Body() {
     const [data, setData] = useState({});
 
-    const params = {
-        lat: '35.5',
-        ion: '-78.5'
-    }
-    const url =
-        'https://weatherbit-v1-mashape.p.rapidapi.com/forecast/3hourly'
+    const APIKEY = process.env.YOUR_API_KEY
+    // const options = {
+    //     method: 'GET',
+    // };
 
-    const handle = () => {
-        axios.get(url, {
-            params,
-            headers: {
-                'X-RapidAPI-Key': 'b17ea89733msh92a5bbff3f3f518p138afbjsn2b1007c93b44',
-                'X-RapidAPI-Host': 'weatherbit-v1-mashape.p.rapidapi.com'
-            },
-        })
-            .then(res => {console.log(res)})
-            .catch(err => console.log(err))
+    //     fetch(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`, options)
+    //     .then(res => console.log(res))
+    //     .catch(err => console.error(err));
+    //     // .then(response => response.json())
+
+    // const config = () => {
+    //     axios.get(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`)
+    //         .then(res => setData(res.data.data), console.log(data))
+    //         .catch(err => console.log(err))
+    //         // console.log(data)
+    // }
+
+    // useEffect(() => {
+    //     const getUser = async () => {
+    //           const response = await axios.get(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`);
+    //           console.log(response.data.data);
+    //           setData(response.data.data)
+    //       }
+    // })
+
+    const handle = async() => {
+        const response = await axios.get(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`);
+                  console.log(response.data.data);
+                  setData(response.data.data)
     }
+
 
     return (
         <div className='h-[100vh] bg-[#fff] flex background'>
@@ -33,13 +47,14 @@ export default function Body() {
                     <logo className='text-2xl'>The weather</logo>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    <h1 className='text-[6rem]'>16•</h1>
+                    <h1 className='text-[6rem]'>{data.current.weather.tp}•</h1>
                     <div className='ml-3 flex flex-col'>
-                        <h3 className='text-[3rem]'>London</h3>
+                        <h3 className='text-[3rem]'>{data.city}, {data.state} {data.country}</h3>
                         <div className='flex'>
-                            <h4>06:09•</h4>
-                            <h4>Monday, 9 sep'19</h4>
+                            <h4>{data.current.weather.ts.substr(0, 10)}</h4>
+                            {/* <h4>Monday, 9 sep'19</h4> */}
                         </div>
+                        {/* <button onClick={handle}>Click</button> */}
                     </div>
 
                     <div className='mt-5 ml-5 flex flex-col items-center'>
@@ -47,9 +62,6 @@ export default function Body() {
                         Cloudy
                     </div>
                 </div>
-        {/* <button onClick={handle}>
-            Click
-        </button> */}
             </div>
             <Glass />
         </div>
