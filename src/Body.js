@@ -13,6 +13,8 @@ export default function Body() {
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
 
+    let date = new Date().toString()
+
     const APIKEY = process.env.YOUR_API_KEY
 
 
@@ -60,7 +62,7 @@ export default function Body() {
     // })
 
     const handle = async() => {
-        const response = await axios.get(`${api.base}lat=.${lat}&lon=${long}&key=${api.key}`);
+        const response = await axios.get(`${api.nearest.base}lat=.${lat}&lon=${long}&key=${api.nearest.key}`);
                   console.log(response.data.data);
                   setData(response.data.data)
     }
@@ -71,18 +73,17 @@ export default function Body() {
     return (
         <div className='h-[100vh] bg-[#fff] flex background'>
             <div className='text-[#fff]'>
-                <div className='p-10 w-[50%]'>
+                <div className='p-10 border'>
                     <logo className='text-2xl'>The weather</logo>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1>
+                    {/* <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1> */}
                     <div className='ml-3 flex flex-col'>
-                        <h3 className='text-[3rem]'>{data.city}, {data.state} {data.country}</h3>
+                        <h3 className='text-[3rem]'>{data.city} {data.state} {data.country}</h3>
                         <div className='flex'>
-                            <h4>{data.current.weather.ts.substr(0, 10)}</h4>
-                            {/* <h4>Monday, 9 sep'19</h4> */}
+                            <h4>{date.substr(0, 21)}</h4>
                         </div>
-                        <button onClick={handle}>Click</button>
+                        {/* <button onClick={handle}>Click</button> */}
                     </div>
 
                     <div className='mt-5 ml-5 flex flex-col items-center'>
@@ -95,4 +96,3 @@ export default function Body() {
         </div>
     )
 }
-
