@@ -7,16 +7,20 @@ import api from './api'
 
 
 export default function Body() {
-    const [query, setQuery] = useState("")
-    const [errMsg, setErrMsg] = useState("")
+
+    // require('dotenv').config()
+
+    // const [query, setQuery] = useState("")
+    // const [errMsg, setErrMsg] = useState("")
     const [data, setData] = useState({});
+    const [dataW, setDataW] = useState({});
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
 
     let date = new Date().toString()
 
-    const APIKEY = process.env.YOUR_API_KEY
-
+    const APIKEY = process.env.REACT_APP_API_KEY
+    console.log(APIKEY)
 
     const geolocationAPI = navigator.geolocation;
 
@@ -25,18 +29,18 @@ export default function Body() {
         if (!geolocationAPI) {
             alert('Geolocation API is not available in your browser!')
         } else {
-          geolocationAPI.getCurrentPosition((position) => {
-            const { coords } = position;
-            setLat(coords.latitude);
-            setLong(coords.longitude);
-          }, (error) => {
-            alert('Something went wrong getting your position!')
-          })
+            geolocationAPI.getCurrentPosition((position) => {
+                const { coords } = position;
+                setLat(coords.latitude);
+                setLong(coords.longitude);
+            }, (error) => {
+                alert('Something went wrong getting your position!')
+            })
         }
     }
 
     getUserCoordinates();
-        
+
     // const options = {
     //     method: 'GET',
     // };
@@ -61,23 +65,34 @@ export default function Body() {
     //       }
     // })
 
-    const handle = async() => {
-        const response = await axios.get(`${api.nearest.base}lat=.${lat}&lon=${long}&key=${api.nearest.key}`);
-                  console.log(response.data.data);
-                  setData(response.data.data)
-    }
+    // const handle = async() => {
+    //     const response = await axios.get(`${api.nearest.base}lat=.${lat}&lon=${long}&key=${api.nearest.key}`);
+    //               console.log(response.data.data);
+    //               setData(response.data.data)
+    // }
 
-    handle()
+    // handle()
+
+    useEffect(() => {
+        axios.get(`${api.nearest.base}lat=.${lat}&lon=${long}&key=${api.nearest.key}`)
+            //  .then((res) => console.log(res.data.data))
+            .then((res) => { setData(res.data.data) })
+            .then((res) => console.log(res.data.data))
+            .catch((err) => console.log(err))
+    })
+
+    // console.log(dataW.weather)
 
 
     return (
         <div className='h-[100vh] bg-[#fff] flex background'>
             <div className='text-[#fff]'>
-                <div className='p-10 border'>
-                    <logo className='text-2xl'>The weather</logo>
+                <div className='m-10 border w-[20%]'>
+                    <main className='text-2xl'>The weather</main>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    {/* <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1> */}
+                    <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1>
+                    {/* <h1 className='text-[6rem]'>{dataW.weather.tp}°</h1> */}
                     <div className='ml-3 flex flex-col'>
                         <h3 className='text-[3rem]'>{data.city} {data.state} {data.country}</h3>
                         <div className='flex'>
