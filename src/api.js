@@ -5,11 +5,9 @@
 
 const endpoint = {
     nearest : {
-        key: "42fbe635-4be9-48c4-bd4c-d87e55ba989a",
         base: "http://api.airvisual.com/v2/nearest_city?"
     },
     search: {
-        key: "42fbe635-4be9-48c4-bd4c-d87e55ba989a",
         base: "http://api.airvisual.com/v2/city?"
     }
 }
