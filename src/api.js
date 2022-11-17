@@ -5,11 +5,10 @@
 
 const endpoint = {
     nearest : {
-        base: "http://api.airvisual.com/v2/nearest_city?"
-    },
-    search: {
-        base: "http://api.airvisual.com/v2/city?"
+        base: "https://api.openweathermap.org/data/2.5/weather?"
     }
 }
 
 export default endpoint
+
+// https://api.openweathermap.org/data/2.5/weather?lat=29.2&lon=32.1&units=metric&q=lagos&APPID=c5330adc3281940247830b8e976d4a8b

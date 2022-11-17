@@ -7,10 +7,7 @@ import api from './api'
 import {FiSearch} from 'react-icons/fi'
 
 export default function Body() {
-    // const [query, setQuery] = useState("")
-    // const [errMsg, setErrMsg] = useState("")
     const [data, setData] = useState({});
-    const [dataW, setDataW] = useState({});
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
 
@@ -35,47 +32,13 @@ export default function Body() {
 
     getUserCoordinates();
 
-    // const options = {
-    //     method: 'GET',
-    // };
-
-    //     fetch(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`, options)
-    //     .then(res => console.log(res))
-    //     .catch(err => console.error(err));
-    //     // .then(response => response.json())
-
-    // const config = () => {
-    //     axios.get(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`)
-    //         .then(res => setData(res.data.data), console.log(data))
-    //         .catch(err => console.log(err))
-    //         // console.log(data)
-    // }
-
-    // useEffect(() => {
-    //     const getUser = async () => {
-    //           const response = await axios.get(`http://api.airvisual.com/v2/nearest_city?key=42fbe635-4be9-48c4-bd4c-d87e55ba989a`);
-    //           console.log(response.data.data);
-    //           setData(response.data.data)
-    //       }
-    // })
-
-    // const handle = async() => {
-    //     const response = await axios.get(`${api.nearest.base}lat=.${lat}&lon=${long}&key=${api.nearest.key}`);
-    //               console.log(response.data.data);
-    //               setData(response.data.data)
-    // }
-
-    // handle()
-
     useEffect(() => {
-        axios.get(`${api.nearest.base}lat=.${lat}&lon=${long}&key=${APIKEY}`)
-            //  .then((res) => console.log(res.data.data))
-            .then((res) => {setData(res.data.data)})
-            .then((res) => {setDataW(res.data.data.current.weather)})
+        axios.get(`${api.nearest.base}lat=${lat}lon=${long}&units=metric&q=lagos&APPID=${APIKEY}`)
+            // .then((res) => console.log(res.data))
+            .then((res) => setData(res.data))
             .catch((err) => console.log(err))
-    })
-
-
+        }, [])
+        
     return (
         <div className='h-[100vh] bg-[#fff] flex background'>
             <div className='text-[#fff]'>
@@ -83,14 +46,12 @@ export default function Body() {
                     <main className='text-2xl'>The weather</main>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    {/* <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1> */}
-                    <h1 className='text-[6rem]'>{dataW.tp}°</h1>
+                    <h1 className='text-[6rem]'>{data.main?.temp}°</h1>
                     <div className='ml-3 flex flex-col'>
-                        <h3 className='text-[3rem]'>{data.city} {data.state} {data.country}</h3>
+                        <h3 className='text-[3rem]'>{data?.name}, {data.sys?.country}</h3>
                         <div className='flex'>
                             <h4>{date.substr(0, 21)}</h4>
                         </div>
-                        {/* <button onClick={handle}>Click</button> */}
                     </div>
 
                     <div className='mt-5 ml-5 flex flex-col items-center'>
