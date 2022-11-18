@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react'
-// import Glass from './Glass'
 import './App.css'
 import { BsCloudsFill } from 'react-icons/bs'
+import { BsCloudRainFill } from 'react-icons/bs'
+import { BsSunFill } from 'react-icons/bs'
 import axios from 'axios'
 import api from './api'
 import { FiSearch } from 'react-icons/fi'
-import Glass from './Glass'
 
+// const DataContext = React.createContext()
+// export default DataContext
 
+// const Consumer = DataContext.Provider
+// export {Consumer}
 
-export default function Body() {
+// console.log(DataContext)
+
+export function Body() {
     const [data, setData] = useState({});
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
-
-    let StoreData = data
-
-    let dataContext
-    dataContext = React.createContext(data)
-
-    console.log(dataContext)
+    const [search, setSearch] = useState('')
+    const [make, setMake] = useState(false)
+    console.log(search)
 
     let date = new Date().toString()
     const APIKEY = process.env.REACT_APP_API_KEY
@@ -43,14 +45,23 @@ export default function Body() {
     getUserCoordinates();
 
     useEffect(() => {
-        axios.get(`${api.nearest.base}lat=${lat}lon=${long}&units=metric&q=lagos&APPID=${APIKEY}`)
+        axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&APPID=${APIKEY}`)
             // .then((res) => console.log(res.data))
             .then((res) => setData(res.data))
             .catch((err) => console.log(err))
     }, [])
+    console.log(data)
+
+    const handleSearch = () => {
+        axios.get(`${api.nearest.base}lat=${lat}lon=${long}&units=metric&q=${search}&APPID=${APIKEY}`)
+        // .then((res) => console.log(res.data))
+        .then((res) => setData(res.data))
+        // .catch((err) => console.log(err))
+    }
+    // className={data?.weather[0]?.main === 'Clouds' ? 'h-[100vh] bg-[#326] flex' : 'h-[100vh] bg-[] flex'}
 
     return (
-        <div className='h-[100vh] bg-[#fff] flex background'>
+        <div className='flex h-[100vh] bg-[#326]'>
             <div className='text-[#fff]'>
                 <div className='m-10 w-[30%]'>
                     <main className='text-2xl'>The weather</main>
@@ -64,20 +75,61 @@ export default function Body() {
                         </div>
                     </div>
 
-                    <div className='mt-5 ml-5 flex flex-col items-center'>
-                        <BsCloudsFill size={30} />
-                        Cloudy
+                    <div className='mt-10 ml-5 flex flex-col items-center'> 
+                        {/* <BsCloudsFill size={30} className={data.weather[0].main === 'Clouds' ? 'block' : 'hidden'}/>
+                         <BsSunFill size={30} className={data.weather[0].main === 'Clear' ? 'block' : 'hidden'}/> */}
+                        {/* <BsCloudRainFill size={30}/>  */}
+                        {/* {data?.weather[0]?.main} */}
                     </div>
                 </div>
             </div>
 
-            <dataContext.Provider value={data}>
-                <Glass />
-            </dataContext.Provider>
+
+            <div className='Glass absolute h-[100vh] w-[40%] right-0 text-[#e1f1f2] px-10 pt-10'>
+                <div>
+                    <FiSearch size={40} color={'#000'} className='ml-auto -mt-7 p-2 bg-[#A52A2A] w-[11%] h-[10%]' onClick={handleSearch}/>
+                    <div>
+                        <form className='border-b border-[#fff] pb-3'>
+                            <input type="text" name="name" placeholder='Another Place' className='bg-[#66000000] focus:outline-0' onChange={text => setSearch(text.target.value)}/>
+                        </form>
+                    </div>
+                    {/* <div className='mt-10 border-b pb-5 border-[#fff]'>
+                        <ul>
+                            <li>Brimingham</li>
+                            <li>Manchester</li>
+                            <li>New York</li>
+                            <li>California</li>
+                        </ul>
+                    </div> */}
+
+                    <div className='mt-5'>
+                        <h3 className='text-base font-semibold'>Weather Details</h3>
+
+                        <ul className='mt-7 space-y-3'>
+                            <li className='flex justify-between'>
+                                <h4>Sea Level</h4>
+                                <h2>{data.main?.sea_level}</h2>
+                            </li>
+                            <li className='flex justify-between'>
+                                <h4>Humidity</h4>
+                                <h2>{data.main?.humidity}%</h2>
+                            </li>
+                            <li className='flex justify-between'>
+                                <h2>Wind</h2>
+                                <h4>{data.wind?.speed}km/h</h4>
+                            </li>
+                            <li className='flex justify-between'>
+                                <h2>Description</h2>
+                                {/* <h4>{data.weather[0]?.description}</h4> */}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     )
-    // export dataContext
 }
 
-
-// export default dataContext
+{/* <DataContext.Provider value={data}>
+    <Glass />
+</DataContext.Provider> */}

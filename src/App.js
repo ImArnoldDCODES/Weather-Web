@@ -1,6 +1,6 @@
 import './App.css';
-import Body from './Body'
-
+// import Body from './Body'
+import { Body } from './Body';
 function App() {
   return (
     <div className="App">
