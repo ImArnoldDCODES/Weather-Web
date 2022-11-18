@@ -1,4 +1,5 @@
  A WEB WITH WEATHER FORECAST IN DIFFERENT PLACES
+![weather(1)](https://user-images.githubusercontent.com/86753228/202707896-7d187ccf-0997-44fd-8baa-6cd8c3bd89fc.png)
 
 # Getting Started with Create React App
 
