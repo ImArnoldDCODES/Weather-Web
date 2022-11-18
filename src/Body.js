@@ -4,12 +4,22 @@ import './App.css'
 import { BsCloudsFill } from 'react-icons/bs'
 import axios from 'axios'
 import api from './api'
-import {FiSearch} from 'react-icons/fi'
+import { FiSearch } from 'react-icons/fi'
+import Glass from './Glass'
+
+
 
 export default function Body() {
     const [data, setData] = useState({});
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
+
+    let StoreData = data
+
+    let dataContext
+    dataContext = React.createContext(data)
+
+    console.log(dataContext)
 
     let date = new Date().toString()
     const APIKEY = process.env.REACT_APP_API_KEY
@@ -37,12 +47,12 @@ export default function Body() {
             // .then((res) => console.log(res.data))
             .then((res) => setData(res.data))
             .catch((err) => console.log(err))
-        }, [])
-        
+    }, [])
+
     return (
         <div className='h-[100vh] bg-[#fff] flex background'>
             <div className='text-[#fff]'>
-                <div className='m-10 border w-[30%]'>
+                <div className='m-10 w-[30%]'>
                     <main className='text-2xl'>The weather</main>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
@@ -61,43 +71,13 @@ export default function Body() {
                 </div>
             </div>
 
-            <div className='Glass absolute h-[100vh] w-[40%] right-0 text-[#e1f1f2] px-10 pt-10'>
-            <div>
-                <FiSearch size={40} color={'#000'} className='ml-auto -mt-7 p-2 bg-[#A52A2A] w-[11%] h-[10%]'/>
-                <div>
-                <form className='border-b border-[#fff] pb-3'>
-                    <input type="text" name="name" placeholder='Another Place' className='bg-[#66000000] focus:outline-0'/>
-                </form>
-                </div>
-                <div className='mt-10 border-b pb-5 border-[#fff]'>
-                    <ul>
-                        <li>Brimingham</li>
-                        <li>MAnchester</li>
-                        <li>New York</li>
-                        <li>California</li>
-                    </ul>
-                </div>
-
-                <div className='mt-5'>
-                    <h3 className='text-base font-semibold'>Weather Details</h3>
-
-                    <ul className='mt-7 space-y-3'>
-                        <li className='flex justify-between'>
-                            <h4>Cloudy</h4>
-                            <h2>{}</h2>
-                        </li>
-                        <li className='flex justify-between'>
-                            <h4> Humidity</h4>
-                            <h2>62%</h2>
-                        </li>
-                        <li className='flex justify-between'>
-                            <h2>Wind</h2>
-                            <h4>85km/h</h4>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+            <dataContext.Provider value={data}>
+                <Glass />
+            </dataContext.Provider>
         </div>
     )
+    // export dataContext
 }
+
+
+// export default dataContext
