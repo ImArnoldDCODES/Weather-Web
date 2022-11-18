@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import { BsCloudsFill } from 'react-icons/bs'
-import { BsCloudRainFill } from 'react-icons/bs'
-import { BsSunFill } from 'react-icons/bs'
 import axios from 'axios'
-import api from './api'
 import { FiSearch } from 'react-icons/fi'
 
 // const DataContext = React.createContext()
@@ -19,9 +15,9 @@ export function Body() {
     const [data, setData] = useState({});
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
-    const [search, setSearch] = useState('')
-    const [make, setMake] = useState(false)
-    console.log(search)
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [country, setCountry] = useState('')
 
     let date = new Date().toString()
     const APIKEY = process.env.REACT_APP_API_KEY
@@ -45,20 +41,25 @@ export function Body() {
     getUserCoordinates();
 
     useEffect(() => {
-        axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&APPID=${APIKEY}`)
-            // .then((res) => console.log(res.data))
+        // axios.get(`http://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${long}&key=${APIKEY}`)
+        axios.get(`http://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${long}&key=${APIKEY}`)
             .then((res) => setData(res.data))
-            .catch((err) => console.log(err))
+            // .catch((err) => console.log(err))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    console.log(data)
 
+    // city=Los Angeles&state=California&country=USA
     const handleSearch = () => {
-        axios.get(`${api.nearest.base}lat=${lat}lon=${long}&units=metric&q=${search}&APPID=${APIKEY}`)
-        // .then((res) => console.log(res.data))
+        axios.get(`http://api.airvisual.com/v2/city?city=${city}&state=${state}&country=${country}&key=${APIKEY}`)
         .then((res) => setData(res.data))
         // .catch((err) => console.log(err))
+        setCity('')
+        setCountry('')
+        setCountry('')
+        if(res => res.status === 400){
+            alert("Can't find place")
+        }
     }
-    // className={data?.weather[0]?.main === 'Clouds' ? 'h-[100vh] bg-[#326] flex' : 'h-[100vh] bg-[] flex'}
 
     return (
         <div className='flex h-[100vh] bg-[#326]'>
@@ -67,9 +68,9 @@ export function Body() {
                     <main className='text-2xl'>The weather</main>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    <h1 className='text-[6rem]'>{data.main?.temp}°</h1>
+                    <h1 className='text-[6rem]'>{data.data?.current?.weather.tp}°</h1>
                     <div className='ml-3 flex flex-col'>
-                        <h3 className='text-[3rem]'>{data?.name}, {data.sys?.country}</h3>
+                        <h3 className='text-[3rem]'>{data.data?.city}, {data.data?.country}</h3>
                         <div className='flex'>
                             <h4>{date.substr(0, 21)}</h4>
                         </div>
@@ -88,19 +89,20 @@ export function Body() {
             <div className='Glass absolute h-[100vh] w-[40%] right-0 text-[#e1f1f2] px-10 pt-10'>
                 <div>
                     <FiSearch size={40} color={'#000'} className='ml-auto -mt-7 p-2 bg-[#A52A2A] w-[11%] h-[10%]' onClick={handleSearch}/>
-                    <div>
-                        <form className='border-b border-[#fff] pb-3'>
-                            <input type="text" name="name" placeholder='Another Place' className='bg-[#66000000] focus:outline-0' onChange={text => setSearch(text.target.value)}/>
-                        </form>
-                    </div>
-                    {/* <div className='mt-10 border-b pb-5 border-[#fff]'>
-                        <ul>
-                            <li>Brimingham</li>
-                            <li>Manchester</li>
-                            <li>New York</li>
-                            <li>California</li>
-                        </ul>
-                    </div> */}
+
+                    <form className='pb-3' onSubmit={handleSearch}>
+                        <div className='border-b border-[#fff] pb-3'>
+                            <input type="text" name="name" placeholder='City' className='bg-[#66000000] focus:outline-0' onChange={text => setCity(text.target.value)}/>
+                        </div>
+
+                        <div className='border-b border-[#fff] pb-3 mt-5'>
+                            <input type="text" name="name" placeholder='State' className='bg-[#66000000] focus:outline-0' onChange={text => setState(text.target.value)}/>
+                        </div>
+
+                        <div className='border-b border-[#fff] pb-3 mt-5'>
+                            <input type="text" name="name" placeholder='Country' className='bg-[#66000000] focus:outline-0' onChange={text => setCountry(text.target.value)}/>
+                        </div>
+                    </form>
 
                     <div className='mt-5'>
                         <h3 className='text-base font-semibold'>Weather Details</h3>
@@ -108,18 +110,18 @@ export function Body() {
                         <ul className='mt-7 space-y-3'>
                             <li className='flex justify-between'>
                                 <h4>Sea Level</h4>
-                                <h2>{data.main?.sea_level}</h2>
+                                <h2>{data.data?.current?.weather?.pr}</h2>
                             </li>
                             <li className='flex justify-between'>
                                 <h4>Humidity</h4>
-                                <h2>{data.main?.humidity}%</h2>
+                                <h2>{data.data?.current?.weather?.hu}%</h2>
                             </li>
                             <li className='flex justify-between'>
                                 <h2>Wind</h2>
-                                <h4>{data.wind?.speed}km/h</h4>
+                                <h4>{data.data?.current?.weaher?.ws}km/h</h4>
                             </li>
                             <li className='flex justify-between'>
-                                <h2>Description</h2>
+                                {/* <h2>Description</h2> */}
                                 {/* <h4>{data.weather[0]?.description}</h4> */}
                             </li>
                         </ul>
