@@ -33,7 +33,7 @@ export default function Body() {
                 setLat(coords.latitude);
                 setLong(coords.longitude);
             }, (error) => {
-                alert('Something went wrong getting your position!')
+                alert('Something went wrong getting your location!')
             })
         }
     }
@@ -69,7 +69,7 @@ export default function Body() {
                     <main className='text-2xl'>The weather</main>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1>
+                    {/* <h1 className='text-[6rem]'>{data?.current?.weather?.tp}°</h1> */}
                     <div className='ml-3 flex flex-col'>
                         <h3 className='text-[3rem]'>{data.city}, {data.country}</h3>
                         <div className='flex'>
