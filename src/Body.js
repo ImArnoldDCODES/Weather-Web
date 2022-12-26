@@ -11,7 +11,7 @@ import { FiSearch } from 'react-icons/fi'
 
 // console.log(DataContext)
 
-export function Body() {
+export default function Body() {
     const [data, setData] = useState({});
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
@@ -43,10 +43,11 @@ export function Body() {
     useEffect(() => {
         // axios.get(`http://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${long}&key=${APIKEY}`)
         axios.get(`http://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${long}&key=${APIKEY}`)
-            .then((res) => setData(res.data))
+            .then((res) => setData(res.data.data))
             // .catch((err) => console.log(err))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [APIKEY,lat,long])
+
+    console.log(data)
 
     // city=Los Angeles&state=California&country=USA
     const handleSearch = () => {
@@ -68,19 +69,16 @@ export function Body() {
                     <main className='text-2xl'>The weather</main>
                 </div>
                 <div className='mt-[22rem] m-10 flex items-center px-5'>
-                    <h1 className='text-[6rem]'>{data.data?.current?.weather.tp}°</h1>
+                    <h1 className='text-[6rem]'>{data.current.weather.tp}°</h1>
                     <div className='ml-3 flex flex-col'>
-                        <h3 className='text-[3rem]'>{data.data?.city}, {data.data?.country}</h3>
+                        <h3 className='text-[3rem]'>{data.city}, {data.country}</h3>
                         <div className='flex'>
                             <h4>{date.substr(0, 21)}</h4>
                         </div>
+                        <h1>{data.city}</h1>
                     </div>
 
                     <div className='mt-10 ml-5 flex flex-col items-center'> 
-                        {/* <BsCloudsFill size={30} className={data.weather[0].main === 'Clouds' ? 'block' : 'hidden'}/>
-                         <BsSunFill size={30} className={data.weather[0].main === 'Clear' ? 'block' : 'hidden'}/> */}
-                        {/* <BsCloudRainFill size={30}/>  */}
-                        {/* {data?.weather[0]?.main} */}
                     </div>
                 </div>
             </div>
@@ -110,15 +108,15 @@ export function Body() {
                         <ul className='mt-7 space-y-3'>
                             <li className='flex justify-between'>
                                 <h4>Sea Level</h4>
-                                <h2>{data.data?.current?.weather?.pr}</h2>
+                                {/* <h2>{data.data?.current?.weather?.pr}</h2> */}
                             </li>
                             <li className='flex justify-between'>
                                 <h4>Humidity</h4>
-                                <h2>{data.data?.current?.weather?.hu}%</h2>
+                                {/* <h2>{data.data?.current?.weather?.hu}%</h2> */}
                             </li>
                             <li className='flex justify-between'>
                                 <h2>Wind</h2>
-                                <h4>{data.data?.current?.weaher?.ws}km/h</h4>
+                                {/* <h4>{data.data?.current?.weaher?.ws}km/h</h4> */}
                             </li>
                             <li className='flex justify-between'>
                                 {/* <h2>Description</h2> */}
@@ -131,7 +129,3 @@ export function Body() {
         </div>
     )
 }
-
-{/* <DataContext.Provider value={data}>
-    <Glass />
-</DataContext.Provider> */}
